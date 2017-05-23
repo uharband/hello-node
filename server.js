@@ -21,5 +21,5 @@ app.get('/long/:duration', function (req, res) {
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 
 app.listen(server_port, function () {
-  console.log('Example app listening on port ' + server_port + "! try my / api!')
+  console.log('Example app listening on port ' + server_port + '! try my / api!')
 })
