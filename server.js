@@ -18,7 +18,8 @@ app.get('/long/:duration', function (req, res) {
   },sleepDuration);
 })
 
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 
-app.listen(8090, function () {
-  console.log('Example app listening on port 8090! try my / api!')
+app.listen(server_port, function () {
+  console.log('Example app listening on port ' + server_port + "! try my / api!')
 })
