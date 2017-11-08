@@ -3,6 +3,7 @@ var fs = require('fs');
 var app = express();
 var path = require('path')
 
+app.use(express.static('data'))
 
 app.get('/', function (req, res) {
   res.send('Hello World! try my /ping api!')
