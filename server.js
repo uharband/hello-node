@@ -1,9 +1,10 @@
 var express = require('express');
 var fs = require('fs');
 var app = express();
-var path = require('path')
+var path = require('path');
+var cloudconvert = new (require('cloudconvert'))('U3BF0M5jGxy0WSO6H5_if_F_CQVN0G69EuO35jxYboMEkaWLVfF4lAQJpm37ZP6ot7RiBjI4qQCP5f7cb2c4aw');
 
-app.use(express.static('data'))
+app.use(express.static('data'));
 
 app.get('/', function (req, res) {
   res.send('Hello World! try my /ping api!')
@@ -56,9 +57,25 @@ app.get('/manage/status/:status', function (req, res) {
 
 // upload an audio file
 app.post('/upload', function(req, res) {
-    req.pipe(fs.createWriteStream(__dirname + path.sep + 'data'  + path.sep + 'recording.3gp'));
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('OK!');
+    req.pipe(fs.createWriteStream(__dirname + path.sep + 'data'  + path.sep + 'recording.3gp').on('finish', function() {
+
+
+    fs.createReadStream('data/recording.3gp')
+        .pipe(cloudconvert.convert({
+            inputformat: '3gp',
+            outputformat: 'mp3',
+            converteroptions: {
+                quality : 100,
+            }
+        }))
+        .pipe(fs.createWriteStream('data/recording.mp3'))
+        .on('finish', function() {
+            console.log('Done!');
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            res.end('OK!');
+        });
+    }));
+
 });
 
 
